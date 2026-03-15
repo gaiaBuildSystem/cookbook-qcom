@@ -1,0 +1,34 @@
+#
+# Copyright 2025 MicroHobby
+#
+# Reference boot script.
+
+echo "Booting Reference ..."
+
+# check if loglevel is set
+if env exists loglevel
+    then
+        echo "loglevel is set to ${loglevel}"
+    else
+        setenv loglevel 3
+fi
+
+env set bootargs root=LABEL:rootfs rootfstype=ext4
+env set bootargs ${bootargs} console=ttyMSM0,115200
+env set bootargs ${bootargs} logo.nologo vt.global_cursor_default=0
+env set bootargs ${bootargs} 8250.nr_uarts=1
+# env set bootargs ${bootargs} ignore_loglevel earlycon
+env set bootargs ${bootargs} loglevel=${loglevel}
+env set bootargs ${bootargs} ${extraargs}
+
+saveenv
+
+# loads the kernel and the initramfs
+mmc dev 0
+fatload mmc 0:6 ${kernel_addr_r} Image
+fatload mmc 0:6 ${fdt_addr_r} qrb2210-arduino-imola.dtb
+fatload mmc 0:6 ${ramdisk_addr_r} initramfs.cpio.gz
+env set ramdisk_size ${filesize}
+
+# run the kernel
+booti ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}
