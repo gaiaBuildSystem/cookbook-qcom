@@ -52,7 +52,7 @@ if os.environ["MACHINE"] == "arduino-uno-q":
     gzip -k u-boot-nodtb.bin
     cat u-boot-nodtb.bin.gz ../linux/arch/arm64/boot/dts/qcom/qrb2210-arduino-imola.dtb > u-boot-dtb.bin.gz
 
-    mkbootimg \
+    sudo mkbootimg \
         --base 0x80000000 \
         --pagesize 4096 \
         --kernel u-boot-dtb.bin.gz \
@@ -85,9 +85,20 @@ if os.environ["MACHINE"] == "arduino-uno-q":
     sync
 
     # dd the boot partition
-    dd if=@(_DEPLOY_DIR)/@(_IMAGE_NAME) of=@(_DEPLOY_DIR)/disk-sdcard.img.esp bs=512 skip=@(_BOOT_SKIP) count=@(_BOOT_COUNT) status=none
+    sudo dd \
+        if=@(_DEPLOY_DIR)/@(_IMAGE_NAME) \
+        of=@(_DEPLOY_DIR)/disk-sdcard.img.esp \
+        bs=512 skip=@(_BOOT_SKIP) \
+        count=@(_BOOT_COUNT) \
+        status=none
+
     # dd the root partition
-    dd if=@(_DEPLOY_DIR)/@(_IMAGE_NAME) of=@(_DEPLOY_DIR)/disk-sdcard.img.root bs=512 skip=@(_ROOT_SKIP) count=@(_ROOT_COUNT) status=none
+    sudo dd \
+        if=@(_DEPLOY_DIR)/@(_IMAGE_NAME) \
+        of=@(_DEPLOY_DIR)/disk-sdcard.img.root \
+        bs=512 skip=@(_ROOT_SKIP) \
+        count=@(_ROOT_COUNT) \
+        status=none
 
     # .3 update the rawprogram0.xml.template for the flasher XML to flash
     _UBOOT_IMG_SIZE_KB = "4096.0"
@@ -119,8 +130,10 @@ if os.environ["MACHINE"] == "arduino-uno-q":
             _ROOT_IMG_START_SECTOR
         )
 
-    with open(f"{_DEPLOY_DIR}/rawprogram0.xml", 'w') as file:
+    with open(f"{_path}/{_MACHINE}/rawprogram0.xml", 'w') as file:
         file.write(_filedata)
+
+    sudo mv @(f"{_path}/{_MACHINE}")/rawprogram0.xml @(_DEPLOY_DIR)/rawprogram0.xml
 
 else:
     Error_Out(
