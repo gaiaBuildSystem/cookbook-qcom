@@ -1,0 +1,18 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Qualcomm Distro Manifest Schema",
+    "allOf": [
+        {
+            "$ref": "../../gaia/schema/distro.json"
+        }
+    ],
+    "properties": {
+        "machine": {
+            "description": "The machine type",
+            "type": "string",
+            "enum": [
+                "arduino-uno-q"
+            ]
+        }
+    }
+}

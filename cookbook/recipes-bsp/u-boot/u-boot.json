@@ -1,0 +1,16 @@
+{
+    "name": "u-boot",
+    "type": "bootloader",
+    "support": [
+        "linux/arm64"
+    ],
+    "source": "https://github.com/gaiaBuildSystem/u-boot",
+    "hostDeps": [
+        "xxd"
+    ],
+    "ref": {
+        "linux/arm64": "8008ca96a4dc53ddb3e51b96ea7e86d881ab7969"
+    },
+    "priority": 1,
+    "merge": true
+}

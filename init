@@ -1,0 +1,31 @@
+#!/bin/bash
+
+##
+# INSTALL DEPS FOR THIS COOKBOOK
+##
+
+sudo apt-get update
+sudo apt-get install -y \
+    python3 \
+    python3-pip \
+    pipx
+
+pipx install xonsh
+pipx ensurepath
+pipx inject xonsh distro
+pipx inject xonsh shtab
+pipx inject xonsh pyyaml
+pipx inject xonsh psutil
+pipx inject xonsh torizon-templates-utils
+pipx inject xonsh GitPython
+pipx inject xonsh python-lsp-server
+pipx inject xonsh pylsp-rope
+
+/root/.bun/bin/bun install
+
+# check where xonsh was installed and make an symlink to /usr/bin
+if [ -f ~/.local/bin/xonsh ]; then
+    if [ ! -L /usr/bin/xonsh ]; then
+        sudo ln -s ~/.local/bin/xonsh /usr/bin/xonsh
+    fi
+fi
