@@ -1,0 +1,14 @@
+{
+    "name": "qcom-boot",
+    "type": "config",
+    "priority": 0,
+    "support": [
+        "linux/arm64"
+    ],
+    "targetDeps": [
+        "mkbootimg"
+    ],
+    "afterDeployRecipes": [
+        "create-boot-image.xsh"
+    ]
+}
