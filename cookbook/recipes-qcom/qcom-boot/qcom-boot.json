@@ -5,7 +5,7 @@
     "support": [
         "linux/arm64"
     ],
-    "targetDeps": [
+    "hostDeps": [
         "mkbootimg"
     ],
     "afterDeployRecipes": [
