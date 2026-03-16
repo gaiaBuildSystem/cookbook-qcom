@@ -5,9 +5,14 @@
     "support": [
         "linux/arm64"
     ],
+    "source": "https://github.com/gaiaBuildSystem/qcom-ptool/archive/",
+    "file": "6b9bdebb6c88809a543117735003c3f0e9ea8217.tar.gz",
     "hostDeps": [
         "mkbootimg",
         "fdisk"
+    ],
+    "fetchRecipes": [
+        "download-qcom-ptool.xsh"
     ],
     "afterDeployRecipes": [
         "create-boot-image.xsh"
