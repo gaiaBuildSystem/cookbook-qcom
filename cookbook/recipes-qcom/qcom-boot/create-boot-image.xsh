@@ -71,16 +71,18 @@ if os.environ["MACHINE"] == "arduino-uno-q":
     # parted $IMAGE_PATH -s mkpart primary fat32 8 158 \
     #     set 1 lba on align-check optimal 1 \
     #     mkpart primary ext4 159 $(($MAX_IMG_SIZE - 151))
-    # therefore, we can calculate the offset and size for dd
-    _BOOT_OFFSET = 8 * 1024 * 1024
-    _BOOT_SIZE = (158 - 8) * 1024 * 1024
-    _ROOT_OFFSET = 159 * 1024 * 1024
-    _ROOT_SIZE = (int(_MAX_IMG_SIZE) - 151 - 159) * 1024 * 1024
+    # read the actual partition table from the image to get the correct sector offsets
+    # (parted uses decimal MB and aligns to MiB boundaries, so computing offsets manually is error-prone)
+    _sfdisk_out = $(sfdisk --json @(f'{_DEPLOY_DIR}/{_IMAGE_NAME}'))
+    _parts = json.loads(_sfdisk_out)['partitiontable']['partitions']
 
-    _BOOT_SKIP = _BOOT_OFFSET // 512
-    _BOOT_COUNT = _BOOT_SIZE // 512
-    _ROOT_SKIP = _ROOT_OFFSET // 512
-    _ROOT_COUNT = _ROOT_SIZE // 512
+    _BOOT_SKIP = _parts[0]['start']
+    _BOOT_COUNT = _parts[0]['size']
+    _ROOT_SKIP = _parts[1]['start']
+    _ROOT_COUNT = _parts[1]['size']
+
+    _BOOT_SIZE = _BOOT_COUNT * 512
+    _ROOT_SIZE = _ROOT_COUNT * 512
 
     sync
 
