@@ -103,19 +103,19 @@ if os.environ["MACHINE"] == "arduino-uno-q":
         count=@(_ROOT_COUNT) \
         status=none
 
-    # .3 replace the partition.conf.template
-    with open(f"{_path}/{_MACHINE}/partition.conf.template", 'r') as file:
+    # .3 replace the partitions.conf.template
+    with open(f"{_path}/{_MACHINE}/partitions.conf.template", 'r') as file:
         _filedata = file.read()
 
-    with open(f"{_path}/{_MACHINE}/partition.conf", 'w') as file:
+    with open(f"{_path}/{_MACHINE}/partitions.conf", 'w') as file:
         file.write(_filedata)
 
-    sudo mv @(f"{_path}/{_MACHINE}")/partition.conf \
-        @(_QCOM_PTOOL_PATH)/partition.conf
+    sudo mv @(f"{_path}/{_MACHINE}")/partitions.conf \
+        @(_QCOM_PTOOL_PATH)/partitions.conf
 
     # .3 use the qcom-ptool to create the partitions
     cd @(_QCOM_PTOOL_PATH)
-    python3 gen_partition.py -i partition.conf -o ptool-partitions.xml
+    python3 gen_partition.py -i partitions.conf -o ptool-partitions.xml
     python3 ptool.py -x ptool-partitions.xml
 
     # .4 create the bundle for the flash
