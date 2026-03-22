@@ -39,6 +39,7 @@ _IMAGE_MNT_BOOT = f"{_BUILD_PATH}/tmp/{_MACHINE}/mnt/boot"
 _IMAGE_MNT_ROOT = f"{_BUILD_PATH}/tmp/{_MACHINE}/mnt/root"
 os.environ['IMAGE_MNT_BOOT'] = _IMAGE_MNT_BOOT
 os.environ['IMAGE_MNT_ROOT'] = _IMAGE_MNT_ROOT
+_QCOM_PTOOL_PATH = f"{_BUILD_PATH}/tmp/{_MACHINE}/qcom-ptool"
 _DEPLOY_DIR = f"{_BUILD_PATH}/tmp/{_MACHINE}/deploy"
 os.environ['DEPLOY_DIR'] = _DEPLOY_DIR
 
@@ -102,40 +103,47 @@ if os.environ["MACHINE"] == "arduino-uno-q":
         count=@(_ROOT_COUNT) \
         status=none
 
-    # .3 update the rawprogram0.xml.template for the flasher XML to flash
-    _UBOOT_IMG_SIZE_KB = "4096.0"
-    _ESP_IMG_SIZE_KB = str(_BOOT_SIZE // 1024)
-    _ESP_IMG_SECTORS = str(_BOOT_SIZE // 512)
-    _ROOT_IMG_SIZE_KB = str(_ROOT_SIZE // 1024)
-    _ROOT_IMG_SECTORS = str(_ROOT_SIZE // 512)
-    _ROOT_IMG_START_SECTOR = str(985408 + int(_ESP_IMG_SECTORS))
-
-    with open(f"{_path}/{_MACHINE}/rawprogram0.xml.template", 'r') as file:
+    # .3 replace the partition.conf.template
+    with open(f"{_path}/{_MACHINE}/partition.conf.template", 'r') as file:
         _filedata = file.read()
-        _filedata = _filedata.replace(
-            '{{UBOOT_IMG_SIZE_KB}}',
-            _UBOOT_IMG_SIZE_KB
-        ).replace(
-            '{{ESP_IMG_SIZE_KB}}',
-            _ESP_IMG_SIZE_KB
-        ).replace(
-            '{{ESP_IMG_SECTORS}}',
-            _ESP_IMG_SECTORS
-        ).replace(
-            '{{ROOT_IMG_SIZE_KB}}',
-            _ROOT_IMG_SIZE_KB
-        ).replace(
-            '{{ROOT_IMG_SECTORS}}',
-            _ROOT_IMG_SECTORS
-        ).replace(
-            '{{ROOT_IMG_START_SECTOR}}',
-            _ROOT_IMG_START_SECTOR
-        )
 
-    with open(f"{_path}/{_MACHINE}/rawprogram0.xml", 'w') as file:
+    with open(f"{_path}/{_MACHINE}/partition.conf", 'w') as file:
         file.write(_filedata)
 
-    sudo mv @(f"{_path}/{_MACHINE}")/rawprogram0.xml @(_DEPLOY_DIR)/rawprogram0.xml
+    sudo mv @(f"{_path}/{_MACHINE}")/partition.conf \
+        @(_QCOM_PTOOL_PATH)/partition.conf
+
+    # .3 use the qcom-ptool to create the partitions
+    cd @(_QCOM_PTOOL_PATH)
+    python3 gen_partition.py -i partition.conf -o ptool-partitions.xml
+    python3 ptool.py -x ptool-partitions.xml
+
+    # .4 create the bundle for the flash
+    _flash_files = [
+        "gpt_backup0.bin",
+        "gpt_both0.bin",
+        "gpt_empty0.bin",
+        "gpt_main0.bin",
+        "patch0.xml",
+        "rawprogram0.xml",
+        "rawprogram0_BLANK_GPT.xml",
+        "rawprogram0_WIPE_PARTITIONS.xml",
+        "wipe_rawprogram_PHY0.xml",
+        "wipe_rawprogram_PHY1.xml",
+        "wipe_rawprogram_PHY2.xml",
+        "wipe_rawprogram_PHY3.xml",
+        "wipe_rawprogram_PHY4.xml",
+        "wipe_rawprogram_PHY5.xml",
+        "wipe_rawprogram_PHY6.xml",
+        "wipe_rawprogram_PHY7.xml",
+        "zeros_1sector.bin",
+        "zeros_33sectors.bin"
+    ]
+
+    sudo mkdir -p @(_DEPLOY_DIR)/flash
+
+    for _file in _flash_files:
+        sudo cp @(_QCOM_PTOOL_PATH)/@(_file) @(_DEPLOY_DIR)/flash/@(_file)
 
 else:
     Error_Out(
