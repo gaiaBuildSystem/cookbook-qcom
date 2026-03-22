@@ -23,9 +23,9 @@ saveenv
 
 # loads the kernel and the initramfs
 mmc dev 0
-fatload mmc 0:43 ${kernel_addr_r} Image
-fatload mmc 0:43 ${fdt_addr_r} qrb2210-arduino-imola.dtb
-fatload mmc 0:43 ${ramdisk_addr_r} initramfs.cpio.gz
+fatload mmc 0:48 ${kernel_addr_r} Image
+fatload mmc 0:48 ${fdt_addr_r} qrb2210-arduino-imola.dtb
+fatload mmc 0:48 ${ramdisk_addr_r} initramfs.cpio.gz
 env set ramdisk_size ${filesize}
 
 # run the kernel
