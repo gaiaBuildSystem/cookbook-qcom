@@ -53,7 +53,6 @@ wget @(f"{meta['source']}{meta['file']}") -O @(_FETCH_DIR)/qcom-ptool.tar.gz
 
 # and then extract it
 cd @(_FETCH_DIR)
-rm -rf qcom-ptool*
 tar -xzf qcom-ptool.tar.gz --strip-components=1
 cd -
 
