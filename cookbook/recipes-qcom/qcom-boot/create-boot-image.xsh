@@ -131,7 +131,6 @@ if os.environ["MACHINE"] == "arduino-uno-q":
         "wipe_rawprogram_PHY0.xml",
         "wipe_rawprogram_PHY1.xml",
         "wipe_rawprogram_PHY2.xml",
-        "wipe_rawprogram_PHY3.xml",
         "wipe_rawprogram_PHY4.xml",
         "wipe_rawprogram_PHY5.xml",
         "wipe_rawprogram_PHY6.xml",
