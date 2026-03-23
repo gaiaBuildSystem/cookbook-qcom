@@ -14,7 +14,7 @@
     "fetchRecipes": [
         "download-qcom-ptool.xsh"
     ],
-    "afterDeployRecipes": [
+    "afterBundleInitramfsRecipes": [
         "create-boot-image.xsh"
     ]
 }
