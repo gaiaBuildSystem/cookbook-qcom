@@ -13,8 +13,10 @@ if env exists loglevel
         setenv loglevel 3
 fi
 
-env set bootargs root=LABEL:rootfs rootfstype=ext4
+env set bootargs root=LABEL:gaia rootfstype=ext4
 env set bootargs ${bootargs} console=ttyMSM0,115200
+# mimic the Debian from Arduino
+env set bootargs ${bootargs} clk_ignore_unused pd_ignore_unused audit=0 deferred_probe_timeout=30
 # env set bootargs ${bootargs} ignore_loglevel earlycon
 env set bootargs ${bootargs} loglevel=${loglevel}
 env set bootargs ${bootargs} ${extraargs}
