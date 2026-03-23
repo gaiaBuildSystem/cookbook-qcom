@@ -12,5 +12,8 @@
         "linux/arm64": "8008ca96a4dc53ddb3e51b96ea7e86d881ab7969"
     },
     "priority": 1,
+    "patchRecipes": [
+        "env.xsh"
+    ],
     "merge": true
 }
