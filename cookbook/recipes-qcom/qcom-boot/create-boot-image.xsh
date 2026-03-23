@@ -144,6 +144,10 @@ if os.environ["MACHINE"] == "arduino-uno-q":
     for _file in _flash_files:
         sudo cp @(_QCOM_PTOOL_PATH)/@(_file) @(_DEPLOY_DIR)/flash/@(_file)
 
+    # as we could make it easy to get only the bundle, let's also add there
+    # the boot.img
+    sudo cp @(_DEPLOY_DIR)/boot.img @(_DEPLOY_DIR)/flash/boot.img
+
 else:
     Error_Out(
         f"Machine [{os.environ['MACHINE']}] is not supported",
