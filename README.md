@@ -2,7 +2,7 @@
 
 <p align="center">
     <img
-        src=".assets/cover.png?v=2"
+        src=".assets/cover2.png"
         alt="Logo"
         width="600" />
 </p>
