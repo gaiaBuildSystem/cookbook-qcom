@@ -21,7 +21,7 @@ pipx inject xonsh GitPython
 pipx inject xonsh python-lsp-server
 pipx inject xonsh pylsp-rope
 
-/root/.bun/bin/bun install
+/root/.deno/bin/deno install
 
 # check where xonsh was installed and make an symlink to /usr/bin
 if [ -f ~/.local/bin/xonsh ]; then
