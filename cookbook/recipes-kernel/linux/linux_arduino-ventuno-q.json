@@ -1,0 +1,19 @@
+{
+    "name": "linux",
+    "type": "kernel",
+    "priority": 1,
+    "source": "https://github.com/gaiaBuildSystem/linux.git",
+    "support": [
+        "linux/arm64"
+    ],
+    "ref": {
+        "linux/arm64": "b8f0c6b1ab06243dfcbe33fdfecb4ce2c12be008"
+    },
+    "afterDeployRecipes": [
+        "dtb.xsh"
+    ],
+    "initramfsRecipes": [
+        "init-modules.xsh"
+    ],
+    "merge": true
+}

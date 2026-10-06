@@ -11,7 +11,8 @@
             "description": "The machine type",
             "type": "string",
             "enum": [
-                "arduino-uno-q"
+                "arduino-uno-q",
+                "arduino-ventuno-q"
             ]
         }
     }

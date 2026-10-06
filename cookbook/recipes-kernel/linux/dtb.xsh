@@ -46,6 +46,13 @@ if os.environ["MACHINE"] == "arduino-uno-q":
         @(_BUILD_PATH)/tmp/@(_MACHINE)/linux/arch/arm64/boot/dts/qcom/qrb2210-arduino-imola.dtb \
         @(_IMAGE_MNT_BOOT)/
 
+elif os.environ["MACHINE"] == "arduino-ventuno-q":
+    # copy the device tree blob
+    sudo -k \
+        cp -f \
+        @(_BUILD_PATH)/tmp/@(_MACHINE)/linux/arch/arm64/boot/dts/qcom/monaco-arduino-monza.dtb \
+        @(_IMAGE_MNT_BOOT)/
+
 else:
     Error_Out(
         f"Machine [{os.environ['MACHINE']}] is not supported",
