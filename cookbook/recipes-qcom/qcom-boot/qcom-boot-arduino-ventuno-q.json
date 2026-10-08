@@ -13,8 +13,14 @@
         "dosfstools",
         "mtools"
     ],
+    "targetDeps": [
+        "systemd-boot"
+    ],
     "fetchRecipes": [
         "download-qcom-ptool.xsh"
+    ],
+    "deployRecipes": [
+        "deploy.xsh"
     ],
     "afterBundleRecipes": [
         "create-boot-image.xsh"

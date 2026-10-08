@@ -1,0 +1,2 @@
+title  {{DISTRO}}-{{DISTRO_MAJOR}}.{{DISTRO_MINOR}}.{{DISTRO_PATCH}}
+efi /EFI/BOOT/u-boot-app.efi
