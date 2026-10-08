@@ -161,6 +161,10 @@ elif os.environ["MACHINE"] == "arduino-ventuno-q":
     sudo mkdir -p @(_DTB_DIR)/@(_DTB_BASE_NAME)
     sudo cp @(_DTB_SRC) @(_DTB_DIR)/@(_DTB_BASE_NAME)/combined-dtb.dtb
 
+    # remove any stale dtb.bin from a previous build before creating the FAT image
+    # (mkfs.vfat -C refuses to create the file if it already exists)
+    sudo rm -f @(_DTB_BIN)
+
     sudo mkfs.vfat -S 512 -C @(_DTB_BIN) 4096
     sudo mcopy -i @(_DTB_BIN) -vsmpQ @(_DTB_DIR)/@(_DTB_BASE_NAME)/* ::/
 
