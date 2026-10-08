@@ -159,7 +159,7 @@ elif os.environ["MACHINE"] == "arduino-ventuno-q":
 
     sudo rm -rf @(_DTB_DIR)
     sudo mkdir -p @(_DTB_DIR)/@(_DTB_BASE_NAME)
-    sudo cp @_DTB_SRC @(_DTB_DIR)/@(_DTB_BASE_NAME)/combined-dtb.dtb
+    sudo cp @(_DTB_SRC) @(_DTB_DIR)/@(_DTB_BASE_NAME)/combined-dtb.dtb
 
     sudo mkfs.vfat -S 512 -C @(_DTB_BIN) 4096
     sudo mcopy -i @(_DTB_BIN) -vsmpQ @(_DTB_DIR)/@(_DTB_BASE_NAME)/* ::/
