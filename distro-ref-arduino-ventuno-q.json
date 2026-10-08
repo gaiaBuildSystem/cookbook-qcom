@@ -15,7 +15,8 @@
         "./cookbook"
     ],
     "includeRecipes": [
-        "linux"
+        "linux",
+        "qcom-boot"
     ],
     "$schema": "./schema/distro.json"
 }

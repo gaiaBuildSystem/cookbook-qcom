@@ -1,0 +1,20 @@
+{
+    "name": "qcom-boot",
+    "type": "config",
+    "priority": 0,
+    "support": [
+        "linux/arm64"
+    ],
+    "source": "https://github.com/gaiaBuildSystem/qcom-ptool/archive/",
+    "file": "83b4e4c54ffc51962654405c7cc49ea598304f93.tar.gz",
+    "hostDeps": [
+        "mkbootimg",
+        "fdisk"
+    ],
+    "fetchRecipes": [
+        "download-qcom-ptool.xsh"
+    ],
+    "afterBundleRecipes": [
+        "create-boot-image.xsh"
+    ]
+}
