@@ -1,0 +1,45 @@
+#
+# Copyright 2026 MicroHobby
+#
+# Reference boot script.
+
+echo "Booting Reference ..."
+
+# check if loglevel is set
+if env exists loglevel
+    then
+        echo "loglevel is set to ${loglevel}"
+    else
+        setenv loglevel 3
+fi
+
+saveenv
+
+# find the correct efi disk
+env set efidisk 0
+env set fdt_addr 0xe1000000
+env set scriptaddr 0xe0000000
+env set kernel_addr_r 0xe3000000
+env set ramdisk_addr_r 0xea000000
+
+env set bootargs root=LABEL:gaia rootfstype=ext4
+# env set bootargs ${bootargs} mminit_loglevel=4
+env set bootargs ${bootargs} console=ttyMSM0,115200
+env set bootargs ${bootargs} logo.nologo vt.global_cursor_default=0
+env set bootargs ${bootargs} loglevel=${loglevel}
+env set bootargs ${bootargs} ${extraargs}
+# env set bootargs ${bootargs} shell
+
+# load the kernel
+fatload efi ${efidisk}:1 ${kernel_addr_r} Image
+env set kernel_size ${filesize}
+
+# device tree
+fatload efi ${efidisk}:1 ${fdt_addr} monaco-arduino-monza.dtb
+
+# ramdisk
+fatload efi ${efidisk}:1 ${ramdisk_addr_r} initramfs.cpio.gz
+env set ramdisk_size ${filesize}
+
+# boot using the efi edk
+bootedk ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr}

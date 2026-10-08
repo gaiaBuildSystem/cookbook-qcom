@@ -41,6 +41,12 @@ os.environ['IMAGE_MNT_ROOT'] = _IMAGE_MNT_ROOT
 
 if os.environ["MACHINE"] == "arduino-uno-q":
     sudo -k cp -f @(_path)/@(_MACHINE)/default.env @(_BUILD_PATH)/tmp/@(_MACHINE)/u-boot/board/qualcomm/default.env
+elif os.environ["MACHINE"] == "arduino-ventuno-q":
+    print(
+        "Ventuno Q does not require u-boot env patching",
+        color=Color.WHITE,
+        bg_color=BgColor.GREEN
+    )
 else:
     Error_Out(
         f"Machine [{os.environ['MACHINE']}] is not supported",

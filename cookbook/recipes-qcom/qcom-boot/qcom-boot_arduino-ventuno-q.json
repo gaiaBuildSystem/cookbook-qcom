@@ -9,7 +9,9 @@
     "file": "83b4e4c54ffc51962654405c7cc49ea598304f93.tar.gz",
     "hostDeps": [
         "mkbootimg",
-        "fdisk"
+        "fdisk",
+        "dosfstools",
+        "mtools"
     ],
     "fetchRecipes": [
         "download-qcom-ptool.xsh"

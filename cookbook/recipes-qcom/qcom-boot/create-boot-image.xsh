@@ -149,23 +149,28 @@ if os.environ["MACHINE"] == "arduino-uno-q":
     sudo cp @(_DEPLOY_DIR)/boot.img @(_DEPLOY_DIR)/flash/boot.img
 
 elif os.environ["MACHINE"] == "arduino-ventuno-q":
-    # .1 create the boot.img
-    # zip the u-boot binary
-    cd @(_BUILD_PATH)/tmp/@(_MACHINE)/u-boot/
-    rm -rf u-boot-nodtb.bin.gz
-    rm -rf u-boot-dtb.bin.gz
-    gzip -k u-boot-nodtb.bin
-    cat u-boot-nodtb.bin.gz ../linux/arch/arm64/boot/dts/qcom/qrb2210-arduino-imola.dtb > u-boot-dtb.bin.gz
+    # .1 generate the dtb.bin (FAT image containing the DTB)
+    # based on the QCOM dtb-fit-image fragment, the dtb partition is a FAT
+    # filesystem that holds <board>/combined-dtb.dtb and UEFI/ABL reads it from there
+    _DTB_SRC = f"{_BUILD_PATH}/tmp/{_MACHINE}/linux/arch/arm64/boot/dts/qcom/monaco-arduino-monza.dtb"
+    _DTB_BASE_NAME = "monaco-arduino-monza"
+    _DTB_DIR = f"{_BUILD_PATH}/tmp/{_MACHINE}/qcom_dtbbin_deploy"
+    _DTB_BIN = f"{_DEPLOY_DIR}/dtb.bin"
 
-    sudo mkbootimg \
-        --base 0x80000000 \
-        --pagesize 4096 \
-        --kernel u-boot-dtb.bin.gz \
-        --cmdline "root=/dev/notreal" \
-        --ramdisk /dev/null \
-        --output @(_DEPLOY_DIR)/boot.img
+    sudo rm -rf @(_DTB_DIR)
+    sudo mkdir -p @(_DTB_DIR)/@(_DTB_BASE_NAME)
+    sudo cp @_DTB_SRC @(_DTB_DIR)/@(_DTB_BASE_NAME)/combined-dtb.dtb
 
-    cd -
+    sudo mkfs.vfat -S 512 -C @(_DTB_BIN) 4096
+    sudo mcopy -i @(_DTB_BIN) -vsmpQ @(_DTB_DIR)/@(_DTB_BASE_NAME)/* ::/
+
+    sudo rm -rf @(_DTB_DIR)
+
+    # make the dtb.bin available to the qcom-ptool so ptool.py can write it
+    # into the dtb_a/dtb_b partitions (partitions.conf --filename=dtb.bin)
+    sudo cp @(_DTB_BIN) @(_QCOM_PTOOL_PATH)/dtb.bin
+
+    # Skipped boot.img creation for arduino-ventuno-q as it does not use u-boot
 
     # .2 detatch the /boot and /root partitions
     # this is needed because the flasher XML expects them to be separate
@@ -249,8 +254,8 @@ elif os.environ["MACHINE"] == "arduino-ventuno-q":
         sudo cp @(_QCOM_PTOOL_PATH)/@(_file) @(_DEPLOY_DIR)/flash/@(_file)
 
     # as we could make it easy to get only the bundle, let's also add there
-    # the boot.img
-    sudo cp @(_DEPLOY_DIR)/boot.img @(_DEPLOY_DIR)/flash/boot.img
+    # the dtb.bin
+    sudo cp @(_DEPLOY_DIR)/dtb.bin @(_DEPLOY_DIR)/flash/dtb.bin
 
 else:
     Error_Out(

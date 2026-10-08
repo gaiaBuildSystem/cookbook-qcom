@@ -14,9 +14,16 @@
         "../gaia/cookbook",
         "./cookbook"
     ],
-    "includeRecipes": [
-        "linux",
-        "qcom-boot"
+    "excludeRecipes": [
+        "grub",
+        "u-boot-ram",
+        "su-boot",
+        "microsoft",
+        "powershell",
+        "docker",
+        "initramfs-php",
+        "neofetch",
+        "simple-splash"
     ],
     "$schema": "./schema/distro.json"
 }
