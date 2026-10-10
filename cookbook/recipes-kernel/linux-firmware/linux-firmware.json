@@ -1,0 +1,16 @@
+{
+    "name": "linux-firmware",
+    "type": "kernel",
+    "priority": 1,
+    "support": [
+        "linux/arm64"
+    ],
+    "customData": {
+        "firmwares": [
+            "qcom/a623_gmu.bin",
+            "qcom/a650_sqe.fw",
+            "qcom/qcs8300/qupv3fw.elf"
+        ]
+    },
+    "merge": true
+}

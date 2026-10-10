@@ -12,5 +12,8 @@
     "afterDeployRecipes": [
         "dtb.xsh"
     ],
+    "initramfsRecipes": [
+        "init-modules.xsh"
+    ],
     "merge": true
 }

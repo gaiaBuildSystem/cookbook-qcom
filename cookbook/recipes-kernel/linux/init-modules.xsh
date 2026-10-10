@@ -131,6 +131,41 @@ if os.environ["MACHINE"] == "arduino-uno-q":
     sudo -k cp -f @(_path)/busybox/@(_MACHINE)/02-mods.sh \
         @(_INITRAMFS_PATH)/scripts/02-mods.sh
 
+elif os.environ["MACHINE"] == "arduino-ventuno-q":
+    # the display stack (msm dpu/dsi, adv7535 bridge, i2c-geni, clocks) is
+    # built-in, but the HDMI path still needs firmware at probe time:
+    # the ADV7535 sits on i2c12 and, when the bootloader did not program
+    # that QUP serial engine, i2c-qcom-geni loads qupv3fw.elf through
+    # request_firmware(). Without it in the initramfs the i2c bus defers,
+    # the bridge never probes and DSI never brings up the HDMI output.
+    # The Adreno 623 sqe/gmu blobs are also needed to bring up the GPU.
+    # These are deployed to the rootfs by the linux-firmware recipe
+    # (customData.firmwares), keep the same paths here
+    _fws_to_copy = [
+        # QUP serial engine (i2c12 -> ADV7535 DSI to HDMI bridge)
+        "qcom/qcs8300/qupv3fw.elf",
+        # Adreno 623 GPU
+        "qcom/a650_sqe.fw",
+        "qcom/a623_gmu.bin",
+    ]
+
+    _target_fw_path = f"{_IMAGE_MNT_ROOT}/lib/firmware"
+    # the kernel firmware loader searches /lib/firmware
+    _initramfs_fw_path = f"{_INITRAMFS_PATH}/lib/firmware"
+
+    for fw in _fws_to_copy:
+        _src_file = f"{_target_fw_path}/{fw}"
+
+        if not os.path.exists(_src_file):
+            Error_Out(
+                f"Firmware [{fw}] not found at {_target_fw_path}, check the linux-firmware recipe",
+                Error.ENOFOUND
+            )
+
+        _dest_dir = os.path.dirname(f"{_initramfs_fw_path}/{fw}")
+        sudo mkdir -p @(_dest_dir)
+        sudo -k cp -f @(_src_file) @(_dest_dir)/
+
 else:
     Error_Out(
         f"Machine [{os.environ['MACHINE']}] is not supported",
