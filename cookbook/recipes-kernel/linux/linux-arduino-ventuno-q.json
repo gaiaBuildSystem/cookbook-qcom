@@ -9,6 +9,16 @@
     "ref": {
         "linux/arm64": "4c7517d5fe1366549db6cc9c2fe6437979477caf"
     },
+    "customData": {
+        "ref": {
+            "stable": {
+                "linux/arm64": "4c7517d5fe1366549db6cc9c2fe6437979477caf"
+            },
+            "edge": {
+                "linux/arm64": "bbd1689a24f46b7af1b30969f5f4023c2d3f027a"
+            }
+        }
+    },
     "afterDeployRecipes": [
         "dtb.xsh"
     ],
