@@ -9,7 +9,7 @@
         "xxd"
     ],
     "ref": {
-        "linux/arm64": "fe8c515c7ed7498d417dea33e9105f6b627ef80d"
+        "linux/arm64": "4091cadd8dc7dad574bef5168a2e84df23c620b3"
     },
     "priority": 1,
     "merge": true
