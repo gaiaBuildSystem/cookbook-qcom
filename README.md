@@ -15,6 +15,7 @@ This cookbook provides a collection of recipes to help you get started with Deim
 | Board                      | Gaia Machine Name   |
 |----------------------------|---------------------|
 | Arduino Uno Q              | arduino-uno-q       |
+| Arduino Ventuno Q          | arduino-ventuno-q   |
 
 
 ## Prerequisites
