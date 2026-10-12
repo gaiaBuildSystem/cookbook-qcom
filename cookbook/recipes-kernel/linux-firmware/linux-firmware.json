@@ -10,6 +10,7 @@
             "qcom/a623_gmu.bin",
             "qcom/a650_sqe.fw",
             "qcom/qcs8300/qupv3fw.elf",
+            "qcom/qcs8300/a623_zap.mbn",
             "qcom/vpu/vpu30_p4_s6.mbn"
         ]
     },

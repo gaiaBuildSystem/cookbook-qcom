@@ -145,6 +145,7 @@ elif os.environ["MACHINE"] == "arduino-ventuno-q":
         # QUP serial engine (i2c12 -> ADV7535 DSI to HDMI bridge)
         "qcom/qcs8300/qupv3fw.elf",
         # Adreno 623 GPU
+        "qcom/qcs8300/a623_zap.mbn",
         "qcom/a650_sqe.fw",
         "qcom/a623_gmu.bin",
     ]
