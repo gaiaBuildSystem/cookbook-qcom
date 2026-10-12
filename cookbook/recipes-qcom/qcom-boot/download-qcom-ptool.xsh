@@ -20,6 +20,7 @@ print("Downloading qcom ptool ...", color=Color.WHITE, bg_color=BgColor.GREEN)
 
 # get the common variables
 _ARCH = os.environ.get('ARCH')
+_CLEAN = os.environ.get('CLEAN_IMAGE')
 _MACHINE = os.environ.get('MACHINE')
 _MAX_IMG_SIZE = os.environ.get('MAX_IMG_SIZE')
 _BUILD_PATH = os.environ.get('BUILD_PATH')
@@ -43,6 +44,11 @@ _DEPLOY_DIR = f"{_BUILD_PATH}/tmp/{_MACHINE}/deploy"
 os.environ['DEPLOY_DIR'] = _DEPLOY_DIR
 _FETCH_DIR = f"{_BUILD_PATH}/tmp/{_MACHINE}/qcom-ptool"
 os.environ['FETCH_DIR'] = _FETCH_DIR
+
+# on a clean build start from an empty folder, extracting a different
+# qcom-ptool revision on top of a previous one leaves the old scripts behind
+if _CLEAN == "true":
+    sudo rm -rf @(_FETCH_DIR)
 
 mkdir -p @(_FETCH_DIR)
 cd @(_FETCH_DIR)
