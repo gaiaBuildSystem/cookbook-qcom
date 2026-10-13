@@ -6,7 +6,7 @@
         "linux/arm64"
     ],
     "source": "https://github.com/gaiaBuildSystem/qcom-ptool/archive/",
-    "file": "83b4e4c54ffc51962654405c7cc49ea598304f93.tar.gz",
+    "file": "d61378951d08da3ae053cc9be0495466c16924cb.tar.gz",
     "hostDeps": [
         "mkbootimg",
         "fdisk",
