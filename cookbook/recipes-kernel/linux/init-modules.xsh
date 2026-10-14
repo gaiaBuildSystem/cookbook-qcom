@@ -30,6 +30,8 @@ def copy_firmwares(fw_list, target_fw_path, initramfs_fw_path):
 
         _dest_dir = os.path.dirname(f"{initramfs_fw_path}/{fw}")
 
+        print(f"Copying firmware [{fw}] to initramfs...", color=Color.WHITE, bg_color=BgColor.BLUE)
+
         sudo mkdir -p @(_dest_dir)
         sudo -k cp -f @(_src_file) @(_dest_dir)/
 
