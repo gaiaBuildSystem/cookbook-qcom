@@ -16,6 +16,24 @@ from torizon_templates_utils.colors import print,BgColor,Color
 from torizon_templates_utils.errors import Error_Out,Error
 
 
+def copy_firmwares(fw_list, target_fw_path, initramfs_fw_path):
+    """Copy firmware files from the target rootfs to the initramfs."""
+
+    for fw in fw_list:
+        _src_file = f"{target_fw_path}/{fw}"
+
+        if not os.path.exists(_src_file):
+            Error_Out(
+                f"Firmware [{fw}] not found at {target_fw_path}, check the linux-firmware recipe",
+                Error.ENOFOUND
+            )
+
+        _dest_dir = os.path.dirname(f"{initramfs_fw_path}/{fw}")
+
+        sudo mkdir -p @(_dest_dir)
+        sudo -k cp -f @(_src_file) @(_dest_dir)/
+
+
 print("Deploying initramfs modules ...", color=Color.WHITE, bg_color=BgColor.GREEN)
 
 # get the common variables
@@ -115,6 +133,21 @@ if os.environ["MACHINE"] == "arduino-uno-q":
                     dest_file = os.path.join(dest_dir, file)
                     sudo -k cp -f @(src_file) @(dest_file)
 
+    # firmware files to copy for arduino-uno-q (from linux-firmware recipe)
+    _fws_to_copy = [
+        "qcom/qcm2290/adsp.mbn",
+        "qca/apbtfw11.tlv",
+        "qcom/vpu/ar50lt_p1_gen2_s6.mbn",
+        "qcom/venus-6.0/venus.mbn",
+        "qcom/a702_sqe.fw",
+    ]
+
+    _target_fw_path = f"{_IMAGE_MNT_ROOT}/lib/firmware"
+    # the kernel firmware loader searches /lib/firmware
+    _initramfs_fw_path = f"{_INITRAMFS_PATH}/lib/firmware"
+
+    copy_firmwares(_fws_to_copy, _target_fw_path, _initramfs_fw_path)
+
     # also we need the modules.dep and modules.alias files for depmod to work
     # in the initramfs
     for dep_file in ["modules.dep", "modules.alias"]:
@@ -154,18 +187,7 @@ elif os.environ["MACHINE"] == "arduino-ventuno-q":
     # the kernel firmware loader searches /lib/firmware
     _initramfs_fw_path = f"{_INITRAMFS_PATH}/lib/firmware"
 
-    for fw in _fws_to_copy:
-        _src_file = f"{_target_fw_path}/{fw}"
-
-        if not os.path.exists(_src_file):
-            Error_Out(
-                f"Firmware [{fw}] not found at {_target_fw_path}, check the linux-firmware recipe",
-                Error.ENOFOUND
-            )
-
-        _dest_dir = os.path.dirname(f"{_initramfs_fw_path}/{fw}")
-        sudo mkdir -p @(_dest_dir)
-        sudo -k cp -f @(_src_file) @(_dest_dir)/
+    copy_firmwares(_fws_to_copy, _target_fw_path, _initramfs_fw_path)
 
 else:
     Error_Out(
