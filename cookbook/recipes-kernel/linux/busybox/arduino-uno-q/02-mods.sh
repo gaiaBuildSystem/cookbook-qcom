@@ -22,9 +22,8 @@ modprobe mdt_loader
 modprobe ocmem
 modprobe llcc_qcom
 
-# 4. Clock & power domain controllers (many modules depend on these)
-modprobe dispcc_qcm2290
-modprobe gpucc_qcm2290
+# 4. Clock & power domain controllers (dispcc/gpucc) are built-in: the GPU
+# SMMU needs the GPU_CX_GDSC from gpucc before the deferred probe timeout
 
 # 5. QRTR (IPC, needed before qcom subsystem drivers)
 modprobe qrtr

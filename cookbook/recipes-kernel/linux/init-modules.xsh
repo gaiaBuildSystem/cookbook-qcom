@@ -88,8 +88,6 @@ if os.environ["MACHINE"] == "arduino-uno-q":
 
         # DRM/display-related modules
         "anx7625",
-        "dispcc-qcm2290",
-        "gpucc-qcm2290",
         "drm_gpuvm",
         "ubwc_config",
         "qrtr",
