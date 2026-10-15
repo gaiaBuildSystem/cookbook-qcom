@@ -9,9 +9,11 @@
         "firmwares": [
             "qcom/qcm2290/adsp.mbn",
             "qca/apbtfw11.tlv",
+            "qca/apnv11.bin",
             "qcom/vpu/ar50lt_p1_gen2_s6.mbn",
             "qcom/venus-6.0/venus.mbn",
-            "qcom/a702_sqe.fw"
+            "qcom/a702_sqe.fw",
+            "qcom/qcm2290/a702_zap.mbn"
         ]
     },
     "merge": true

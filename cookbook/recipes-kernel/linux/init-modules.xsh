@@ -90,6 +90,8 @@ if os.environ["MACHINE"] == "arduino-uno-q":
         "anx7625",
         "dispcc-qcm2290",
         "gpucc-qcm2290",
+        "drm_gpuvm",
+        "ubwc_config",
         "qrtr",
         "msm",
         "drm",
@@ -139,9 +141,11 @@ if os.environ["MACHINE"] == "arduino-uno-q":
     _fws_to_copy = [
         "qcom/qcm2290/adsp.mbn",
         "qca/apbtfw11.tlv",
+        "qca/apnv11.bin",
         "qcom/vpu/ar50lt_p1_gen2_s6.mbn",
         "qcom/venus-6.0/venus.mbn",
         "qcom/a702_sqe.fw",
+        "qcom/qcm2290/a702_zap.mbn"
     ]
 
     _target_fw_path = f"{_IMAGE_MNT_ROOT}/lib/firmware"
