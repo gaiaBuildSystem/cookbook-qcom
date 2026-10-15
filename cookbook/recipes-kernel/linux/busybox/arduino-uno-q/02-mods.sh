@@ -49,6 +49,17 @@ modprobe onboard_usb_dev
 modprobe qcom_usb_vbus_regulator
 
 # 9. ANX7625 bridge (depends on drm_dp_aux_bus, drm_display_helper, typec)
+# anx7625 attaches to DSI (binding the whole msm DRM device) before it
+# registers the typec port and looks up the dwc3 usb role switch. If dwc3
+# is not up yet the probe defers, DSI detaches, msm unbinds and the rebind
+# fails (-EBUSY), so wait for the role switch from the PHYs loaded above
+_tries=0
+while [ -z "$(ls /sys/class/usb_role/ 2>/dev/null)" ] && [ $_tries -lt 50 ]; do
+    sleep 0.1
+    _tries=$((_tries + 1))
+done
+[ -z "$(ls /sys/class/usb_role/ 2>/dev/null)" ] && \
+    echo "[initramfs] WARNING: no usb role switch, anx7625 probe will defer"
 modprobe anx7625
 
 # 10. MSM display/GPU driver (the main driver, must be last)
