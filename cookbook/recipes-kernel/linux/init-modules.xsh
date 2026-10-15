@@ -150,7 +150,17 @@ if os.environ["MACHINE"] == "arduino-uno-q":
 
     _target_fw_path = f"{_IMAGE_MNT_ROOT}/lib/firmware"
     # the kernel firmware loader searches /lib/firmware
-    _initramfs_fw_path = f"{_INITRAMFS_PATH}/lib/firmware"
+    _initramfs_fw_path = f"{_INITRAMFS_PATH}/usr/lib/firmware"
+
+    # make sure that the initramfs firmware path exists
+    sudo mkdir -p @(_initramfs_fw_path)
+
+    # at the initramfs we have /lib but is not the symlink for /usr/lib,
+    # so we need to create the symlink for the modules too.
+    # This must be done before copying firmware, otherwise rm -rf would delete
+    # everything that was just copied into /lib/firmware.
+    sudo rm -rf @(_INITRAMFS_PATH)/lib
+    sudo ln -sfn /usr/lib @(_INITRAMFS_PATH)/lib
 
     copy_firmwares(_fws_to_copy, _target_fw_path, _initramfs_fw_path)
 
@@ -160,11 +170,6 @@ if os.environ["MACHINE"] == "arduino-uno-q":
         src_file = f"{_target_modules_path}/{_kernel_version}/{dep_file}"
         dest_file = f"{_initramfs_modules_path}/{_kernel_version}/{dep_file}"
         sudo -k cp -f @(src_file) @(dest_file)
-
-    # at the initramfs we have /lib but is not the symlink for /usr/lib,
-    # so we need to create the symlink for the modules too
-    sudo rm -rf @(_INITRAMFS_PATH)/lib
-    sudo ln -sfn /usr/lib @(_INITRAMFS_PATH)/lib
 
     # finaly we copy the busybox script that will modprobe the modules
     sudo -k cp -f @(_path)/busybox/@(_MACHINE)/02-mods.sh \
