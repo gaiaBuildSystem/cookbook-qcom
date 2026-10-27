@@ -2,9 +2,10 @@
     "name": "DeimOS-Reference",
     "machine": "arduino-uno-q",
     "arch": "linux/arm64",
+    "debian": "bookworm",
     "version": {
         "major": 0,
-        "minor": 0,
+        "minor": 4,
         "patch": 0,
         "build": 0
     },
